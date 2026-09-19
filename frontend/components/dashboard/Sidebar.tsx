@@ -1,29 +1,38 @@
+'use client';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Sidebar({ user }: { user: any }) {
+  const pathname = usePathname();
+  
+  const linkClass = (path: string) => 
+    pathname === path 
+      ? "bg-indigo-50 text-indigo-700 flex items-center px-3 py-2 rounded-md text-sm font-medium"
+      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center px-3 py-2 rounded-md text-sm font-medium";
+
   return (
-    <div className="w-64 bg-white border-r border-gray-200 min-h-screen flex flex-col">
+    <div className="w-64 bg-white border-r border-gray-200 h-screen sticky top-0 flex flex-col">
       <div className="p-6">
         <h1 className="text-2xl font-bold text-indigo-600 tracking-tight">TaskFlow</h1>
       </div>
       
       <nav className="flex-1 px-4 space-y-1">
-        <Link href="/dashboard" className="bg-indigo-50 text-indigo-700 flex items-center px-3 py-2 rounded-md text-sm font-medium">
+        <Link href="/dashboard" className={linkClass('/dashboard')}>
           Dashboard
         </Link>
-        <Link href="/dashboard" className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center px-3 py-2 rounded-md text-sm font-medium">
+        <Link href="/tasks" className={linkClass('/tasks')}>
           My Tasks
         </Link>
-        <Link href="/dashboard" className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center px-3 py-2 rounded-md text-sm font-medium">
+        <Link href="/dashboard" className={linkClass('/calendar')}>
           Calendar
         </Link>
-        <Link href="/dashboard" className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center px-3 py-2 rounded-md text-sm font-medium">
+        <Link href="/categories" className={linkClass('/categories')}>
           Categories
         </Link>
-        <Link href="/dashboard" className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center px-3 py-2 rounded-md text-sm font-medium">
+        <Link href="/dashboard" className={linkClass('/analytics')}>
           Analytics
         </Link>
-        <Link href="/dashboard" className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center px-3 py-2 rounded-md text-sm font-medium">
+        <Link href="/dashboard" className={linkClass('/activity')}>
           Activity
         </Link>
       </nav>
