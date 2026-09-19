@@ -1,4 +1,7 @@
-import Link from 'next/link';
+import os
+
+# Root Welcome Page
+page_tsx = """import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -50,3 +53,5 @@ export default function Home() {
     </main>
   );
 }
+"""
+with open("frontend/app/page.tsx", "w") as f: f.write(page_tsx)
