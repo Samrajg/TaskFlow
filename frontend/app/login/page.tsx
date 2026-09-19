@@ -22,8 +22,10 @@ export default function LoginPage() {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       });
-      // In a real app, set cookie or local storage token here securely.
-      router.push('/dashboard');
+      if (data.access_token) {
+        localStorage.setItem('taskflow_token', data.access_token);
+        router.push('/dashboard');
+      }
     } catch (err: any) {
       setError(err.message || 'Invalid email or password.');
     } finally {

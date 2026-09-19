@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.api.health import router as health_router
 from app.api.auth import router as auth_router
+from app.api.tasks import router as tasks_router
+from app.api.dashboard import router as dashboard_router
 
 app = FastAPI(
     title=settings.app_name,
@@ -20,3 +22,5 @@ app.add_middleware(
 
 app.include_router(health_router, prefix="/api", tags=["health"])
 app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
+app.include_router(tasks_router, prefix="/api/tasks", tags=["tasks"])
+app.include_router(dashboard_router, prefix="/api/dashboard", tags=["dashboard"])
