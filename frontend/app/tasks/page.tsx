@@ -57,8 +57,8 @@ export default function TasksPage() {
       const [dashData, catsData, tasksData] = await Promise.all([dashboardReq, catsReq, tasksReq]);
       
       setUser(dashData.user);
-      setCategories(catsData.items);
-      setTasks(tasksData.items);
+      setCategories(catsData.items || []);
+      setTasks(tasksData.items || []);
       
       // Calculate summary locally from tasksData for simplicity if we don't have a direct endpoint,
       // but dashboardData has total/pending/completed/overdue! We can use that for global or compute from filtered:
@@ -73,7 +73,7 @@ export default function TasksPage() {
       let p = 0, i = 0, c = 0, o = 0;
       const todayDate = new Date().toISOString().split('T')[0];
       
-      tasksData.items.forEach((t: any) => {
+      (tasksData.items || []).forEach((t: any) => {
         if (t.status === 'PENDING') p++;
         if (t.status === 'IN_PROGRESS') i++;
         if (t.status === 'COMPLETED') c++;
@@ -174,9 +174,9 @@ export default function TasksPage() {
                 <TaskTable 
                   tasks={tasks} 
                   loading={loading}
-                  onEdit={(t) => { setEditingTask(t); setIsFormOpen(true); }}
-                  onDelete={(t) => { setTaskToDelete(t); setIsDeleteOpen(true); }}
-                  onView={(t) => { setViewingTask(t); setIsDetailsOpen(true); }}
+                  onEdit={(t: any) => { setEditingTask(t); setIsFormOpen(true); }}
+                  onDelete={(t: any) => { setTaskToDelete(t); setIsDeleteOpen(true); }}
+                  onView={(t: any) => { setViewingTask(t); setIsDetailsOpen(true); }}
                   onStatusChange={handleStatusChange}
                 />
               </div>
@@ -192,7 +192,7 @@ export default function TasksPage() {
           onClose={() => setIsFormOpen(false)}
           task={editingTask}
           categories={categories}
-          onSuccess={(msg) => {
+          onSuccess={(msg: string) => {
             setIsFormOpen(false);
             showToast(msg);
             loadData();

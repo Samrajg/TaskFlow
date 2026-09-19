@@ -12,7 +12,7 @@ export default function TaskTable({ tasks, loading, onEdit, onDelete, onView, on
     );
   }
 
-  if (tasks.length === 0) {
+  if (!tasks || tasks.length === 0) {
     return (
       <div className="p-12 text-center">
         <p className="text-gray-500 mb-2 font-medium">No tasks found</p>
@@ -35,7 +35,7 @@ export default function TaskTable({ tasks, loading, onEdit, onDelete, onView, on
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {tasks.map((task: any) => (
+          {(tasks || []).map((task: any) => (
             <tr key={task.id} className="hover:bg-gray-50">
               <td className="px-6 py-4">
                 <div className="flex items-center">

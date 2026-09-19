@@ -1,6 +1,14 @@
 import httpx
 from app.config import settings
-import json
+import asyncio
+
+_http_client = None
+
+def get_http_client():
+    global _http_client
+    if _http_client is None:
+        _http_client = httpx.AsyncClient(timeout=30.0, limits=httpx.Limits(max_connections=100, max_keepalive_connections=20))
+    return _http_client
 
 class Database:
     def __init__(self):
@@ -16,30 +24,30 @@ class Database:
     async def execute(self, query: str, params: list = None):
         if params is None:
             params = []
-        async with httpx.AsyncClient() as client:
-            payload = {"sql": query, "params": params}
-            response = await client.post(self.base_url, headers=self.headers, json=payload)
-            if not response.is_success:
-                raise Exception(f"DB Error: {response.status_code} {response.text}")
-            data = response.json()
-            if data["success"]:
-                return data["result"][0]["results"]
-            else:
-                raise Exception(f"DB Error: {data['errors']}")
+        payload = {"sql": query, "params": params}
+        client = get_http_client()
+        response = await client.post(self.base_url, headers=self.headers, json=payload)
+        if not response.is_success:
+            raise Exception(f"DB Error: {response.status_code} {response.text}")
+        data = response.json()
+        if data["success"]:
+            return data["result"][0]["results"]
+        else:
+            raise Exception(f"DB Error: {data['errors']}")
 
     async def execute_write(self, query: str, params: list = None):
         if params is None:
             params = []
-        async with httpx.AsyncClient() as client:
-            payload = {"sql": query, "params": params}
-            response = await client.post(self.base_url, headers=self.headers, json=payload)
-            if not response.is_success:
-                raise Exception(f"DB Error: {response.status_code} {response.text}")
-            data = response.json()
-            if data["success"]:
-                return True
-            else:
-                raise Exception(f"DB Error: {data['errors']}")
+        payload = {"sql": query, "params": params}
+        client = get_http_client()
+        response = await client.post(self.base_url, headers=self.headers, json=payload)
+        if not response.is_success:
+            raise Exception(f"DB Error: {response.status_code} {response.text}")
+        data = response.json()
+        if data["success"]:
+            return True
+        else:
+            raise Exception(f"DB Error: {data['errors']}")
 
 def get_db():
     return Database()
