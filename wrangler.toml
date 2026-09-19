@@ -1,0 +1,7 @@
+name = "taskflow"
+compatibility_date = "2024-03-20"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "taskflow"
+database_id = "325484ae-9653-4f55-b052-200218ed05b8"
